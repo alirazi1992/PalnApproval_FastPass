@@ -2237,8 +2237,12 @@ function TechnicianCalendarPathTab({
   };
 
   return (
-    <div className="space-y-6" dir="rtl" lang="fa">
-      <section className="space-y-4">
+    <div
+      className="space-y-8 text-right bg-gradient-to-l from-gray-50 via-white to-gray-50"
+      dir="rtl"
+      lang="fa"
+    >
+      <section className="space-y-4 rounded-3xl border border-gray-100 bg-white/80 p-5 shadow-sm">
         <div className="flex items-start justify-between gap-4 flex-row-reverse">
           <div className="text-right space-y-1">
             <p className="text-xs text-gray-500">
@@ -3604,7 +3608,11 @@ function TechnicianDashboardView() {
   return (
     <WorkspaceAppShell>
       {isReportsTab ? (
-        <div className="space-y-8" dir="rtl" lang="fa">
+        <div
+          className="space-y-10 text-right bg-gradient-to-l from-gray-50 via-white to-gray-50"
+          dir="rtl"
+          lang="fa"
+        >
           <section className="grid gap-6 xl:grid-cols-[1.3fr,0.7fr]">
             <GlassCard className="p-6 space-y-5 bg-white/90 border border-gray-100 shadow-sm">
               <div className="flex flex-row-reverse items-start justify-between gap-6">
@@ -4251,7 +4259,11 @@ function TechnicianDashboardView() {
           onOpenWorkflow={handleOpenWorkflowModal}
         />
       ) : isWorkbenchTab ? (
-        <div className="space-y-8" dir="rtl" lang="fa">
+        <div
+          className="space-y-10 text-right bg-gradient-to-l from-gray-50 via-white to-gray-50"
+          dir="rtl"
+          lang="fa"
+        >
           {selectedProject && (
             <section className="grid gap-6 xl:grid-cols-[1.1fr,0.9fr]">
               <GlassCard className="p-6 space-y-5 bg-white/95 border border-gray-100 shadow-sm">
@@ -4697,7 +4709,11 @@ function TechnicianDashboardView() {
           )}
         </div>
       ) : (
-        <div className="space-y-8" dir="rtl" lang="fa">
+        <div
+          className="space-y-10 text-right bg-gradient-to-l from-gray-50 via-white to-gray-50"
+          dir="rtl"
+          lang="fa"
+        >
         {/* ردیف بالایی */}
         <section className="grid gap-6 xl:grid-cols-[1.3fr_0.9fr_1fr]">
           {/* مرکز عملیات */}
