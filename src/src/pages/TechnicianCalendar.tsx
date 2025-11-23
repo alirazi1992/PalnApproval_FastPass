@@ -179,7 +179,7 @@ const addMonths = (date: Date, amount: number) => {
 const startOfWeek = (date: Date) => {
   const d = new Date(date);
   const day = d.getDay();
-  const diff = day; // Sunday start
+  const diff = (day + 1) % 7; // Saturday start for fa-IR
   return addDays(d, -diff);
 };
 
@@ -225,7 +225,10 @@ const Sidebar: React.FC<{
 }> = ({ activeMenuItem, onMenuChange, activeTeam, onSelectTeam }) => {
   const menuItems = ["Bookings", "Availability", "Teams", "Apps", "Workflows"];
   return (
-    <aside className="bg-white border border-gray-200 rounded-3xl p-5 flex flex-col justify-between min-w-[260px] max-w-[280px] transition-all duration-300 lg:sticky lg:top-6">
+    <aside
+      className="bg-white border border-gray-200 rounded-3xl p-5 flex flex-col justify-between min-w-[260px] max-w-[280px] transition-all duration-300 lg:sticky lg:top-6 text-right"
+      dir="rtl"
+    >
       <div>
         <div className="mb-8">
           <p className="text-xs uppercase tracking-[0.2em] text-gray-400">
@@ -241,7 +244,7 @@ const Sidebar: React.FC<{
             return (
               <button
                 key={item}
-                className={`w-full flex items-center gap-3 rounded-2xl px-4 py-3 text-left text-sm font-medium transition ${
+                className={`w-full flex flex-row-reverse items-center gap-3 rounded-2xl px-4 py-3 text-right text-sm font-medium transition ${
                   active
                     ? "bg-gray-900 text-white shadow-lg"
                     : "text-gray-600 hover:bg-gray-50"
@@ -265,7 +268,7 @@ const Sidebar: React.FC<{
         </p>
         <div className="space-y-2">
           <button
-            className={`w-full text-left px-3 py-2 rounded-xl text-sm border transition ${
+            className={`w-full text-right px-3 py-2 rounded-xl text-sm border transition ${
               !activeTeam
                 ? "bg-gray-900 text-white border-gray-900"
                 : "text-gray-600 border-gray-200 hover:border-gray-400"
@@ -279,7 +282,7 @@ const Sidebar: React.FC<{
             return (
               <button
                 key={team}
-                className={`w-full text-left px-3 py-2 rounded-xl text-sm border transition ${
+                className={`w-full text-right px-3 py-2 rounded-xl text-sm border transition ${
                   active
                     ? "bg-amber-50 border-amber-400 text-amber-800"
                     : "border-gray-200 text-gray-700 hover:border-gray-400"
@@ -304,8 +307,8 @@ const FilterBar: React.FC<{
   onTechnicianChange: (technician?: string) => void;
 }> = ({ filters, onToggleStatus, onTeamChange, onTechnicianChange }) => {
   return (
-    <Card className="p-4 flex flex-wrap gap-4 items-center">
-      <div className="flex items-center gap-2 flex-wrap">
+    <Card className="p-4 flex flex-wrap gap-4 items-center justify-between flex-row-reverse text-right" dir="rtl">
+      <div className="flex flex-row-reverse items-center gap-2 flex-wrap justify-end">
         {statusOptions.map((status) => {
           const active = filters.status.includes(status.value);
           return (
@@ -323,8 +326,8 @@ const FilterBar: React.FC<{
           );
         })}
       </div>
-      <div className="flex gap-3 items-center ml-auto flex-wrap">
-        <div className="flex flex-col text-sm">
+      <div className="flex gap-3 items-center mr-auto flex-wrap flex-row-reverse">
+        <div className="flex flex-col text-sm text-right">
           <label className="text-xs text-gray-500">Team</label>
           <select
             className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-gray-900"
@@ -339,7 +342,7 @@ const FilterBar: React.FC<{
             ))}
           </select>
         </div>
-        <div className="flex flex-col text-sm">
+        <div className="flex flex-col text-sm text-right">
           <label className="text-xs text-gray-500">Technician</label>
           <select
             className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-gray-900"
@@ -389,7 +392,7 @@ const MonthView: React.FC<MonthViewProps> = ({
   const currentMonth = referenceDate.getMonth();
 
   return (
-    <div className="grid grid-cols-7 gap-3">
+    <div className="grid grid-cols-7 gap-3 text-right" dir="rtl">
       {days.map((day) => {
         const key = formatDateKey(day);
         const isToday = key === todayKey;
@@ -403,7 +406,7 @@ const MonthView: React.FC<MonthViewProps> = ({
             } ${isToday ? "border-amber-400" : "border-gray-200"}`}
           >
             <button
-              className="flex items-center justify-between text-xs font-medium text-gray-600"
+              className="flex items-center justify-between text-xs font-medium text-gray-600 flex-row-reverse"
               onClick={() => onDayClick(day)}
             >
               <span>{day.toLocaleDateString("en-US", { day: "numeric" })}</span>
@@ -417,7 +420,7 @@ const MonthView: React.FC<MonthViewProps> = ({
               {dayEvents.map((event) => (
                 <button
                   key={event.id}
-                  className={`w-full text-left text-[11px] px-2 py-1 rounded-xl transition group ${
+                  className={`w-full text-right text-[11px] px-2 py-1 rounded-xl transition group ${
                     statusStyles[event.status].block
                   }`}
                   onClick={() => onEventClick(event.id)}
@@ -428,7 +431,7 @@ const MonthView: React.FC<MonthViewProps> = ({
                       event.end
                     )}`}
                   </p>
-                  <div className="absolute z-10 hidden group-hover:block bg-white text-gray-700 text-xs shadow-lg rounded-xl p-2 mt-1">
+                  <div className="absolute z-10 hidden group-hover:block bg-white text-gray-700 text-xs shadow-lg rounded-xl p-2 mt-1 right-0" dir="rtl">
                     <p className="font-semibold">{event.title}</p>
                     <p>{event.location ?? "No location"}</p>
                     <p>{event.team ?? "No team"}</p>
@@ -492,9 +495,9 @@ const WeekView: React.FC<WeekViewProps> = ({
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto" dir="rtl">
       <div className="min-w-[900px]">
-        <div className="grid grid-cols-8">
+        <div className="grid grid-cols-8 text-right">
           <div />
           {days.map((day) => (
             <div
@@ -514,7 +517,7 @@ const WeekView: React.FC<WeekViewProps> = ({
             {hours.map((hour) => (
               <div
                 key={hour}
-                className="h-24 text-xs text-gray-500 flex items-start justify-end pr-3 border-b border-gray-100"
+                className="h-24 text-xs text-gray-500 flex items-start justify-start pl-3 border-b border-gray-100 text-right"
               >
                 {hour}:00
               </div>
@@ -541,7 +544,7 @@ const WeekView: React.FC<WeekViewProps> = ({
                 {dayEvents.map((event) => (
                   <button
                     key={event.id}
-                    className={`absolute left-2 right-2 rounded-2xl px-3 py-2 text-left text-xs shadow-md overflow-hidden group ${
+                    className={`absolute left-2 right-2 rounded-2xl px-3 py-2 text-right text-xs shadow-md overflow-hidden group ${
                       statusStyles[event.status].block
                     } ${statusStyles[event.status].borderColor}`}
                     style={getPosition(event)}
@@ -553,7 +556,7 @@ const WeekView: React.FC<WeekViewProps> = ({
                     <p className="opacity-80 text-[11px]">
                       {formatTimeLabel(event.start)} – {formatTimeLabel(event.end)}
                     </p>
-                    <div className="absolute left-full top-0 ml-2 hidden group-hover:flex flex-col bg-white text-gray-700 text-xs rounded-xl shadow-lg p-2 min-w-[180px]">
+                    <div className="absolute right-full top-0 mr-2 hidden group-hover:flex flex-col bg-white text-gray-700 text-xs rounded-xl shadow-lg p-2 min-w-[180px] text-right">
                       <span className="font-semibold">{event.title}</span>
                       <span>{event.location ?? "No location"}</span>
                       <span>{event.team ?? "No team"}</span>
@@ -666,10 +669,10 @@ const EventModal: React.FC<EventModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center" dir="rtl">
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
-      <Card className="relative z-10 w-full max-w-2xl p-6 space-y-4">
-        <div className="flex items-center justify-between">
+      <Card className="relative z-10 w-full max-w-2xl p-6 space-y-4 text-right">
+        <div className="flex items-center justify-between flex-row-reverse">
           <div>
             <p className="text-xs text-gray-500">
               {state.mode === "create" ? "Create booking" : "Edit booking"}
@@ -678,7 +681,7 @@ const EventModal: React.FC<EventModalProps> = ({
               {state.mode === "create" ? "New technician event" : title || event?.title}
             </h3>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-row-reverse">
             {state.mode === "edit" && (
               <button
                 className="text-sm text-red-500 hover:text-red-700"
@@ -985,67 +988,67 @@ export function TechnicianCalendar() {
 
   const currentSectionLabel = `Current section: ${filters.team ?? activeMenuItem}`;
 
-  return (
-    <WorkspaceAppShell>
-      <div className="flex flex-col lg:flex-row gap-6">
-        <Sidebar
-          activeMenuItem={activeMenuItem}
-          onMenuChange={handleMenuSelect}
-          activeTeam={filters.team}
-          onSelectTeam={handleTeamSelect}
-        />
-        <div className="flex-1 space-y-4">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-wrap items-center gap-3 justify-between">
-              <div>
-                <p className="text-xs text-gray-500">Technician Command Center</p>
-                <h1 className="text-3xl font-semibold text-gray-900">
-                  {viewMode === "month"
-                    ? formatMonthLabel(selectedDate)
-                    : formatWeekRange(selectedDate)}
-                </h1>
-                <p className="text-xs text-gray-500">{currentSectionLabel}</p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button variant="secondary" size="sm" onClick={() => handleNavigate("prev")}>
-                  ◀
-                </Button>
-                <Button variant="secondary" size="sm" onClick={handleToday}>
-                  Today
-                </Button>
-                <Button variant="secondary" size="sm" onClick={() => handleNavigate("next")}>
-                  ▶
-                </Button>
-                <div className="inline-flex bg-gray-100 rounded-full p-1">
-                  {["month", "week"].map((mode) => (
-                    <button
-                      key={mode}
-                      className={`px-4 py-1 text-sm font-medium rounded-full transition ${
-                        viewMode === mode
-                          ? "bg-white shadow text-gray-900"
-                          : "text-gray-500"
-                      }`}
-                      onClick={() => setViewMode(mode as ViewMode)}
-                    >
-                      {mode === "month" ? "Month" : "Week"}
-                    </button>
-                  ))}
+    return (
+      <WorkspaceAppShell>
+        <div className="flex flex-col lg:flex-row gap-6" dir="rtl" lang="fa">
+          <Sidebar
+            activeMenuItem={activeMenuItem}
+            onMenuChange={handleMenuSelect}
+            activeTeam={filters.team}
+            onSelectTeam={handleTeamSelect}
+          />
+          <div className="flex-1 space-y-4 text-right">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-wrap items-center gap-3 justify-between flex-row-reverse">
+                <div className="text-right">
+                  <p className="text-xs text-gray-500">Technician Command Center</p>
+                  <h1 className="text-3xl font-semibold text-gray-900">
+                    {viewMode === "month"
+                      ? formatMonthLabel(selectedDate)
+                      : formatWeekRange(selectedDate)}
+                  </h1>
+                  <p className="text-xs text-gray-500">{currentSectionLabel}</p>
+                </div>
+                <div className="flex items-center gap-2 flex-row-reverse">
+                  <Button variant="secondary" size="sm" onClick={() => handleNavigate("prev")}>
+                    ▶
+                  </Button>
+                  <Button variant="secondary" size="sm" onClick={handleToday}>
+                    Today
+                  </Button>
+                  <Button variant="secondary" size="sm" onClick={() => handleNavigate("next")}>
+                    ◀
+                  </Button>
+                  <div className="inline-flex bg-gray-100 rounded-full p-1 flex-row-reverse">
+                    {["month", "week"].map((mode) => (
+                      <button
+                        key={mode}
+                        className={`px-4 py-1 text-sm font-medium rounded-full transition ${
+                          viewMode === mode
+                            ? "bg-white shadow text-gray-900"
+                            : "text-gray-500"
+                        }`}
+                        onClick={() => setViewMode(mode as ViewMode)}
+                      >
+                        {mode === "month" ? "Month" : "Week"}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <Card className="p-4 flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-2 flex-1 min-w-[200px]">
-                <Icon name="search" className="text-gray-400" size={18} />
+            <Card className="p-4 flex flex-wrap items-center gap-3 flex-row-reverse">
+              <div className="flex items-center gap-2 flex-1 min-w-[200px] flex-row-reverse">
                 <input
-                  className="flex-1 border border-gray-200 rounded-2xl px-4 py-2 text-sm"
+                  className="flex-1 border border-gray-200 rounded-2xl px-4 py-2 text-sm text-right"
                   placeholder="Search tickets, events, notes"
                   value={filters.search}
                   onChange={(e) => handleSearch(e.target.value)}
                 />
+                <Icon name="search" className="text-gray-400" size={18} />
               </div>
-              <Button onClick={createDefaultEvent}>
-                <Icon name="plus" className="mr-2" />
+              <Button onClick={createDefaultEvent} className="flex flex-row-reverse items-center gap-2">
+                <Icon name="plus" className="ml-2" />
                 Create New
               </Button>
               <button
@@ -1057,11 +1060,11 @@ export function TechnicianCalendar() {
               >
                 <Icon name="bell" />
                 {showNotifications && (
-                  <div className="absolute right-0 mt-3 w-64 bg-white border border-gray-200 rounded-2xl shadow-xl p-4 text-sm text-gray-600">
-                    <p className="font-semibold text-gray-900 mb-1">
+                  <div className="absolute left-0 mt-3 w-64 bg-white border border-gray-200 rounded-2xl shadow-xl p-4 text-sm text-gray-600">
+                    <p className="font-semibold text-gray-900 mb-1 text-right">
                       Notifications
                     </p>
-                    <p>Next audit readiness check is due in 2 days.</p>
+                    <p className="text-right">Next audit readiness check is due in 2 days.</p>
                   </div>
                 )}
               </button>
@@ -1074,9 +1077,9 @@ export function TechnicianCalendar() {
               >
                 <Icon name="settings" />
                 {showSettingsPanel && (
-                  <div className="absolute right-0 mt-3 w-64 bg-white border border-gray-200 rounded-2xl shadow-xl p-4 text-sm text-gray-600">
-                    <p className="font-semibold text-gray-900 mb-1">Quick settings</p>
-                    <p>Working hours: 07:00 – 20:00</p>
+                  <div className="absolute left-0 mt-3 w-64 bg-white border border-gray-200 rounded-2xl shadow-xl p-4 text-sm text-gray-600">
+                    <p className="font-semibold text-gray-900 mb-1 text-right">Quick settings</p>
+                    <p className="text-right">Working hours: 07:00 – 20:00</p>
                   </div>
                 )}
               </button>
